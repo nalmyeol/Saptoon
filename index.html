@@ -863,7 +863,7 @@ document.documentElement.setAttribute('data-theme', currentTheme);
 function updateThemeButtonIcon() {
   const btn = document.getElementById('themeToggleBtn');
   if (btn) {
-    btn.textContent = currentTheme === 'light' ? '☀️' : '🌙';
+    btn.textContent = currentTheme === 'light' ? '☀️️' : '🌙';
   }
 }
 
@@ -1195,7 +1195,7 @@ function handleLikeClick() {
   saveWebtoons();
 
   document.getElementById('likeEpCount').textContent = ep.likes;
-  showToast('❤️ 좋아요가 반영되었습니다!');
+  showToast('❤️️ 좋아요가 반영되었습니다!');
 }
 
 function renderAuthUI() {
@@ -1382,6 +1382,11 @@ function adminDeleteWebtoon(id) {
 }
 
 function handleStartPublishing() {
+  if (!currentUser) {
+    showToast('⚠️ 로그인이 필요한 서비스입니다.');
+    openAuthModal('login');
+    return;
+  }
   if (currentUser && currentUser.isLocked) {
     showToast('차단(락)된 계정은 작품을 등록할 수 없습니다.');
     return;
@@ -1395,6 +1400,13 @@ function closeStudioModal() {
 
 function handleCreateWebtoon(e) {
   e.preventDefault();
+  if (!currentUser) {
+    showToast('⚠️ 로그인이 필요합니다.');
+    closeStudioModal();
+    openAuthModal('login');
+    return;
+  }
+
   const title = document.getElementById('newTitle').value;
   const author = document.getElementById('newAuthor').value;
   const genre = document.getElementById('newGenre').value;
@@ -1435,6 +1447,12 @@ function handleCreateWebtoon(e) {
 }
 
 function openEpisodeStudio(toonId) {
+  if (!currentUser) {
+    showToast('⚠️ 로그인이 필요한 서비스입니다.');
+    closeDetailModal();
+    openAuthModal('login');
+    return;
+  }
   if (currentUser && currentUser.isLocked) {
     showToast('차단(락)된 계정은 회차를 연재할 수 없습니다.');
     return;
@@ -1457,6 +1475,13 @@ function closeEpisodeModal() {
 
 function handleCreateEpisode(e) {
   e.preventDefault();
+  if (!currentUser) {
+    showToast('⚠️ 로그인이 필요합니다.');
+    closeEpisodeModal();
+    openAuthModal('login');
+    return;
+  }
+
   const w = webtoons.find(item => item.id === episodeTargetToonId);
   if (!w) return;
   if (!w.episodes) w.episodes = [];
